@@ -1,7 +1,16 @@
 import express from  'express';
-import createbook from '../controllers/bookController.js'
+import {createbook,findbook,register,login,progress} from '../controllers/bookController.js'
+import {protect} from '../middleware/protect.js'
 export const router = express.Router();
 router.route('/')
-.post(createbook);
+.post(/*protect*/createbook);
+router.route('/find')
+.get(protect,findbook);
 export default router;
+router.route('/register')
+.post(register)
+router.route('/login')
+.post(login)
+router.route('/progress')
+.post(protect,progress)
 
