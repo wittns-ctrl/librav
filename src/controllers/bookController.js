@@ -8,7 +8,7 @@ export const createbook = async (req,res) => {
    const newbook = await book.save();
    res.status(201).json({newbook});
     }catch(error){
-      res.status(400).send('hbad request');
+      res.status(400).send('bad request');
       console.error(error);
     }
 }
@@ -80,3 +80,5 @@ export const progress = async (req,res) => {
   console.error("progress error:", error)
   }
 }
+
+export default createbook;
