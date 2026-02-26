@@ -48,13 +48,14 @@ npm run dev
 
 ## 📡 API Endpoints
 
-| Method | Endpoint             | Description | Auth Required |
-|--------|-----------           |-------------|---------------|
-| POST   | `/api/books`         | Create a new book | ✅ Yes |
-| POST   | `/register/register` | user registration | ✅ Yes |
-| POST   | `/login/login`       | user login        | ✅ Yes |
-| POST   | `/progress/progress` | reading progress  | ✅ Yes |
-| GET    | `/books/api`         | finds books in db | ✅ Yes |
+| Method | Endpoint                  | Description       | Auth 
+                                                          Required |
+|--------|---------------------------|-------------------|---------|
+| POST   | `/api/books`              | Create a new book | ✅ Yes |
+| POST   | `/register/register`      | user registration | ✅ Yes |
+| POST   | `/login/login`            | user login        | ✅ Yes |
+| POST   | `/progress/progress`      | reading progress  | ✅ Yes |
+| GET    | `/books/api/find`         | finds books in db | ✅ Yes |
 ---
 
 ## 📁 Project Structure
