@@ -1,6 +1,9 @@
 import express from  'express';
 import {createbook,findbook,register,login,progress,refresh} from '../controllers/bookController.js'
 import protect from '../middleware/protect.js'
+import {findbook,register,login,progress} from '../controllers/bookController.js'
+import createbook from '../controllers/bookController.js'
+import {protect} from '../middleware/protect.js'
 export const router = express.Router();
 router.route('/')
 .post(protect,createbook);
