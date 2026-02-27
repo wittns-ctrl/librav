@@ -17,6 +17,7 @@ app.use(express.json());
   app.use('/register',router);
   app.use('/login',router);
   app.use('/progress',router);
+  app.unsubscribe('/refresh',router);
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 })();

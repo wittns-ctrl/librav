@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 const bookSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'customer',
+        required: [true, 'user info required']
+    },
     title: {
         type: String,
         required:[true, 'title is required'],
@@ -136,4 +141,16 @@ customer.methods.matchPasword = async function(ent_password) {
     return await bcrypt.compare(ent_password, this.password);
 }
 export const using = mongoose.model('checker', customer);
+const tokenSchema = new mongoose.Schema({
+   user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'customer',
+    unique: true
+   },
+   token : {
+    type: String
+   }
+})
+export const tokenize = mongoose.model('token', tokenSchema)
+
 
