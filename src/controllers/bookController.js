@@ -1,4 +1,4 @@
-import {user,using,proceed,tokenize} from '../models/book.js';
+import {user,using,proceed,tokenize,auth} from '../models/book.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import {hashToken} from '../middleware/protect.js'
@@ -58,6 +58,7 @@ export const findbook = async (req,res) => {
     .sort(sort)
     .skip(skip)
     .limit(limitNumber)
+    .populate("author","name")
     const total = await user.countDocuments(query)
     res.status(200).json({
     success : true,
@@ -77,7 +78,7 @@ export const register = async (req,res)=> {
   try{
     const {name,email,password} = req.body;
   if(email == using.email){
-    return res.status(404).json("user exists");
+    return res.status(409).json("user exists");
   }
   const newUSER = await using.create({
     name: name,
@@ -177,5 +178,37 @@ export const refresh = async (req,res) => {
     console.error("requestTokenError",error.message)
   }
 }
+export const search = async (req, res) => {
+  const { title, author } = req.query;
+if(!title && !author) return res.send("request not full");
+  try {
+    const searchString = `${title || ""}  ${author || ""} `.trim();
+    const G_search = await user.find(
+      {$text: { $search : searchString}},
+      {score : { $meta : "textScore"}}
+    )
+    .sort({score :  { $meta : "textScore"}})
+    .limit(1)
+    res.status(200).json(G_search)
+  } catch (err) {
+    res.status(500).json({  searcherror: err.message });
+  }
+};
 
+
+export const registerAu = async (req,res) =>{
+  try{
+   const {name,email,password} = req.body;
+   const authExists = await auth.findOne({email})
+   if(authExists) return res.status(409).send("user exists");
+   const newauth = await auth.create({
+    name : name,
+    email : email,
+    password : password
+   })
+   res.status(201).send("author created successfully")
+  }catch(error) {
+ console.error("author RegistrationError:",error.message)
+  }
+}
 export default createbook;

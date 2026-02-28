@@ -1,11 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 const bookSchema = new mongoose.Schema({
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'customer',
-        required: [true, 'user info required']
-    },
     title: {
         type: String,
         required:[true, 'title is required'],
@@ -13,11 +8,8 @@ const bookSchema = new mongoose.Schema({
         minlength: 1,
         maxlength: 20
     },
-    author : {
-     type: String,
-     required: [true,'author required'],
-     minlength: 1,
-     maxlength: 10   
+    author : {type:mongoose.Schema.Types.ObjectId,
+        ref: 'authors'
     },
     ISBN : {
         type: String,
@@ -51,7 +43,41 @@ const bookSchema = new mongoose.Schema({
 {
     timestamps: true
 });
+bookSchema.index({title : "text", author : "text"})
 export const user = mongoose.model('user',bookSchema);
+
+
+
+const authors = new mongoose.Schema({
+   name: {
+    type: String,
+    minlength: 1,
+    maxlength: 30,
+    required: true
+   } ,
+   email : {
+    type: String,
+    unique: true
+   },
+   password: {
+    type: String,
+    minlenght:8,
+    unique: true
+   }
+})
+authors.pre('save', async function(next) {
+    if(!this.isModified('password')) return next();
+
+    const salts = await bcrypt.genSalt(10);
+    const passwords = await bcrypt.hash(this.password, salts)
+    this.password = passwords
+})
+authors.methods.matchpassword = async function(passkey){
+    return await bcrypt.compare(passkey,this.password)
+}
+export const auth = mongoose.model('author', authors)
+
+
 
 
 
