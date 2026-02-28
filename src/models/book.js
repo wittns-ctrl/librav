@@ -167,6 +167,10 @@ customer.methods.matchPasword = async function(ent_password) {
     return await bcrypt.compare(ent_password, this.password);
 }
 export const using = mongoose.model('checker', customer);
+
+
+
+
 const tokenSchema = new mongoose.Schema({
    user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -174,9 +178,29 @@ const tokenSchema = new mongoose.Schema({
     unique: true
    },
    token : {
-    type: String
+    type: String,
+    unique: true,
+    sparse: true
    }
 })
 export const tokenize = mongoose.model('token', tokenSchema)
+
+
+
+
+
+const tokeSchema = new mongoose.Schema({
+   user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'authors',
+    unique: true
+   },
+   token : {
+    type: String,
+    unique: true,
+    sparse: true
+   }
+})
+export const tokeize = mongoose.model('Autoken', tokenSchema)
 
 

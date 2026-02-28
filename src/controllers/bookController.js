@@ -1,4 +1,4 @@
-import {user,using,proceed,tokenize,auth} from '../models/book.js';
+import {user,using,proceed,tokenize,tokeize,auth} from '../models/book.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import {hashToken} from '../middleware/protect.js'
@@ -211,4 +211,50 @@ export const registerAu = async (req,res) =>{
  console.error("author RegistrationError:",error.message)
   }
 }
+
+
+
+export const Aulogin = async (req,res) => {
+  try{
+  const {email,password} = req.body;
+  const logedin = await auth.findOne({email});
+     if(!logedin){
+    return res.status(404).send("wrong credentials")
+  }
+  const ext_password =  logedin.password
+  const match = await bcrypt.compare(password,ext_password)
+  if(!match) {
+    res.status(401).send("invalid password")
+  }
+
+  const Accesstoken = jwt.sign(
+    {email: logedin.email,id: logedin.name},
+    process.env.JWT_SECRET,
+    {expiresIn:'15m'}
+  )
+  const refreshtoken = jwt.sign(
+    {id: logedin.email},
+    process.env.JWT_REFRESH,
+    {expiresIn: '7d'}
+  )
+ const hashedToken = hashToken(refreshtoken)
+  const store_token = await tokeize.create({
+    user: logedin._id,
+    token: hashedToken
+  })
+  res.cookie("refreshToken", refreshtoken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+    maxAge: 7*24*60*60*1000
+  })
+  res.json({Accesstoken});
+
+  }catch(err){
+    console.error("login error:",err.message)
+    res.status(500).send("auth server error")
+  }
+}
+
+
 export default createbook;

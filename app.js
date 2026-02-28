@@ -20,6 +20,7 @@ app.use(express.json());
   app.use('/refresh',router);
   app.use('/search', router);
   app.use('/auth',router);
+  app.use('/login',router);
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 })();
