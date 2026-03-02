@@ -38,7 +38,10 @@ const bookSchema = new mongoose.Schema({
         max: 5
     },
     description: String,
-    coverImage: String,
+    coverImage: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'cover'
+    }
 },
 {
     timestamps: true
@@ -203,4 +206,9 @@ const tokeSchema = new mongoose.Schema({
 })
 export const tokeize = mongoose.model('Autoken', tokenSchema)
 
-
+const cover = new mongoose.Schema({
+    coverImage: {
+        type: Buffer
+    }
+})
+export const image = mongoose.model('cover', cover)

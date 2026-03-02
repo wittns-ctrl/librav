@@ -1,6 +1,7 @@
 import {user,using,proceed,tokenize,tokeize,auth} from '../models/book.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import multer from 'multer'
 import {hashToken} from '../middleware/protect.js'
 
 
@@ -256,5 +257,8 @@ export const Aulogin = async (req,res) => {
   }
 }
 
+export const image = async(req,res) => {
+  res.send(req.file)
+}
 
 export default createbook;

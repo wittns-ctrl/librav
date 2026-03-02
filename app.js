@@ -5,6 +5,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './src/config/db.js';
 import router from './src/routes/bookRoutes.js';
+import multer from 'multer'
 
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(express.json());
   app.use('/search', router);
   app.use('/auth',router);
   app.use('/login',router);
+  app.use('/upload',router);
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 })();

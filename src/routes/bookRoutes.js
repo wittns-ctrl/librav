@@ -1,6 +1,7 @@
 import express from  'express';
-import {createbook,findbook,register,login,progress,refresh,search,registerAu,Aulogin} from '../controllers/bookController.js'
-import protect from '../middleware/protect.js'
+import {createbook,findbook,register,login,progress,refresh,search,registerAu,Aulogin,image} from '../controllers/bookController.js'
+import {protect} from '../middleware/protect.js'
+import {upload} from '../middleware/upload.js'
 export const router = express.Router();
 router.route('/')
 .post(protect,createbook);
@@ -20,3 +21,5 @@ router.route('/search')
 router.route('/author')
 .post(registerAu)
 .get(Aulogin)
+router.route('/')
+.post(upload.single('images'),image)
